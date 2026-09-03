@@ -4,7 +4,7 @@ from django.contrib import admin
 from .model.nhanvien import NhanVien
 from .model.thietbi import ThietBi
 from .model.lienket import LienKet
-from .model.chisohieusuat import ChiSoHieuSuat
+from .model.hieusuat import ChiSoHieuSuat
 from .model.lohong import LoHong
 from .model.nhatkyloi import NhatKyLoi
 

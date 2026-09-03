@@ -10,7 +10,7 @@ class SQLConnection:
         self.DATABASE = settings.DB_NAME
         self.USERNAME = settings.DB_USER
         self.PASSWORD = settings.DB_PASSWORD
-        self.SQL_FOLDER = Path(settings.BASE_DIR) / "database" / "sql_thuc_thi"
+        self.SQL_FOLDER = Path(settings.BASE_DIR) / "MSSQL" / "SQL_thuc_thi"
 
         self.files = [
             # Roles

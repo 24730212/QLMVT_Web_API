@@ -4,7 +4,7 @@ from .model.thietbi import ThietBi
 from .model.nhatkyloi import NhatKyLoi
 from .model.lienket import LienKet
 from .model.lohong import LoHong
-from .model.chisohieusuat import ChiSoHieuSuat
+from .model.hieusuat import ChiSoHieuSuat
 
 
 class NhanVienSerializer(serializers.ModelSerializer):
