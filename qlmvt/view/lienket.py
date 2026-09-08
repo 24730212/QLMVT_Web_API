@@ -1,114 +1,39 @@
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from ..model.lienket import LienKet
 from ..serializers import LienKetSerializer
-from ..utils.errorhandler import get_sql_error
+from ..utils.sql_error_handler import get_sql_error
+from ..controller import lienket
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def api_get_ds_lk(request):
-    """ API lấy danh sách liên kết"""
-    try:
-        ds_lk = LienKet.objects.all()
-        serializer = LienKetSerializer(ds_lk, many=True)
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
-
-    except Exception as e:
-        message, status_code = get_sql_error(e)
-        return JsonResponse({
-            "error": message
-        }, status=status_code)
+    return lienket.get_ds_lk(request)
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def api_get_lk(request, ma_lk):
-    """ API lầy liên kết theo mã liên kết"""
-    try:
-        lk = LienKet.objects.get(ma_lk=ma_lk)
-        serializer = LienKetSerializer(lk)
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-    
-    except LienKet.DoesNotExist:
-        return JsonResponse({
-            "error": "Không tìm thấy liên kết"
-        }, status=status.HTTP_404_NOT_FOUND)
-    
-    except Exception as e:
-        message, status_code = get_sql_error(e)
-        return JsonResponse({
-            "error": message
-        }, status=status_code)
+    return lienket.get_lk(request, ma_lk)
 
 
 @api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def api_create_lk(request):
-    """ API thêm mới 1 hoặc nhiều liên kết cùng lúc"""
-    try:
-        data = request.data
-        if isinstance(data, list):
-            serializer = LienKetSerializer(data=data, many=True)
-        else:
-            serializer = LienKetSerializer(data=data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    except Exception as e:
-        message, status_code = get_sql_error(e)
-        return JsonResponse({
-            "error": message
-        }, status=status_code)
+    return lienket.create_lk(request)
 
 
 @api_view(["PUT"])
+@permission_classes([IsAuthenticated])
 def api_update_lk(request, ma_lk):
-    """ API cập nhật liên kết"""
-    try:
-        lk = LienKet.objects.get(ma_lk=ma_lk)
-
-        serializer = LienKetSerializer(lk, data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=status.HTTP_200_OK)
-
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    except LienKet.DoesNotExist:
-        return JsonResponse({
-            "error": "Không tìm thấy liên kết"
-        }, status=status.HTTP_404_NOT_FOUND)
-
-    except Exception as e:
-        message, status_code = get_sql_error(e)
-        return JsonResponse({
-            "error": message
-        }, status=status_code)
+    return lienket.update_lk(request, ma_lk)
 
 
 @api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
 def api_delete_lk(request, ma_lk):
-    """ API xoá liên kết theo mã liên kết"""
-    try:
-        lk = LienKet.objects.get(ma_lk=ma_lk)
-
-        lk.delete()
-
-        return JsonResponse({
-            "message": "Đã xoá thành công"
-        }, status=status.HTTP_200_OK)
-
-    except LienKet.DoesNotExist:
-        return JsonResponse({
-            "error": "Không tìm thấy liên kết"
-        }, status=status.HTTP_404_NOT_FOUND)
-
-    except Exception as e:
-        message, status_code = get_sql_error(e)
-        return JsonResponse({
-            "error": message
-        }, status=status_code)
+    return lienket.delete_lk(request, ma_lk)

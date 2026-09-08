@@ -1,4 +1,7 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenRefreshView
+
+from .view import auth
 from .view import nhanvien
 from .view import thietbi
 from .view import hieusuat
@@ -6,9 +9,17 @@ from .view import lohong
 from .view import lienket
 from .view import nhatkyloi
 from .view import baocao
+from .view import backup_restore
+from .view import import_export
 
 urlpatterns = [
     # Auth
+    path("api_login/", auth.api_login, name="api_login"),
+    path("api_logout/", auth.api_logout, name="api_logout"),
+    path("api_me/", auth.api_me, name="api_me"),
+    path("api_create-account/", auth.api_create_account, name="api_create_account"),
+    path("api_change-password/", auth.api_change_password, name="api_change_password"),
+    path("api_refresh_token/", TokenRefreshView.as_view(), name="api_refresh_token"),
     # Nhân viên
     path("api_get_ds_nv/", nhanvien.api_get_ds_nv, name="api_get_ds_nv"),
     path("api_get_nv/<str:ma_nv>/", nhanvien.api_get_nv, name="api_get_nv"),
@@ -87,10 +98,31 @@ urlpatterns = [
         baocao.api_get_tinh_trang_lo_hong,
         name="api_get_tinh_trang_lo_hong",
     ),
-    # ,
     path(
         "api_get_lo_hong_theo_thiet_bi",
         baocao.api_get_lo_hong_theo_thiet_bi,
         name="api_get_lo_hong_theo_thiet_bi",
+    ),
+    # Backup restore
+    path(
+        "api_backup_database",
+        backup_restore.api_backup_database,
+        name="api_backup_database",
+    ),
+    path(
+        "api_restore_database",
+        backup_restore.api_restore_database,
+        name="api_restore_database",
+    ),
+    # Import - Export dữ liệu 6 bảng
+    path(
+        "api_export_table/<str:model_name>",
+        import_export.api_export_table,
+        name="api_export_table",
+    ),  # vd: api_export_table/nhanvien
+    path(
+        "api_export_table/<str:model_name>",
+        import_export.api_import_table,
+        name="api_export_table",
     ),
 ]
