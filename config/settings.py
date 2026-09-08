@@ -9,10 +9,13 @@ https://docs.djangoproject.com/en/6.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
+
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -42,7 +45,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "qlmvt",
     "rest_framework",
-    "rest_framework.authtoken"
+    # "rest_framework.authtoken",
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 MIDDLEWARE = [
@@ -142,3 +146,32 @@ MAILERS = {
     },
 }
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "EXCEPTION_HANDLER": "qlmvt.utils.exception_handler.custom_exception_handler",
+}
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "UPDATE_LAST_LOGIN": True,
+}
+
+IMPORT_EXPORT_FORMAT = os.getenv("IMPORT_EXPORT_FORMAT")
+
+IMPORT_EXPORT_VERSION = int(os.getenv("IMPORT_EXPORT_VERSION"))
+
+BACKUP_FORMAT = os.getenv("BACKUP_FORMAT")
+
+BACKUP_VERSION = int(os.getenv("BACKUP_VERSION"))

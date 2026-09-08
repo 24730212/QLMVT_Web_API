@@ -7,3 +7,4 @@ pyodbc==5.3.0
 python-dotenv==1.2.3
 pytz==2026.3.post1
 sqlparse==0.5.5
+djangorestframework_simplejwt==5.5.1

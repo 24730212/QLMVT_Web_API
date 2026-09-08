@@ -4,7 +4,7 @@ from django.db import connection
 class BaoCaoService:
 
     @staticmethod
-    def get_kpi_nhan_vien():
+    def get_kpi_nhan_vien(ma_nv=None):
 
         with connection.cursor() as cursor:
 
@@ -16,7 +16,13 @@ class BaoCaoService:
 
             columns = [column[0] for column in cursor.description]
 
-            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+            data = [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+            # User chỉ được xem KPI của chính mình
+            if ma_nv is not None:
+                data = [item for item in data if item["MaNV"] == ma_nv]
+
+            return data
 
     @staticmethod
     def get_lo_hong_theo_thiet_bi():
