@@ -18,7 +18,7 @@ urlpatterns = [
     path("api_logout/", auth.api_logout, name="api_logout"),
     path("api_me/", auth.api_me, name="api_me"),
     path("api_create-account/", auth.api_create_account, name="api_create_account"),
-    path("api_change-password/", auth.api_change_password, name="api_change_password"),
+    path("api_change_password/", auth.api_change_password, name="api_change_password"),
     path("api_refresh_token/", TokenRefreshView.as_view(), name="api_refresh_token"),
     # Nhân viên
     path("api_get_ds_nv/", nhanvien.api_get_ds_nv, name="api_get_ds_nv"),
